@@ -1,0 +1,55 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ILike, Repository } from 'typeorm';
+import { Member } from './entities/member.entity';
+import { CreateMemberDto } from './dto/createmember.dto';
+import { User } from '../user/entities/user.entity';
+import { CreateTeamDto } from "./dto/createteam.dto";
+
+@Injectable()
+export class TeamService {
+  constructor(
+    @InjectRepository(Member) private teamRepository: Repository<Member>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
+
+  async createMember(member: CreateMemberDto) {
+    try {
+      return await this.teamRepository.save(member);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.teamRepository.findOne({
+      select: ['name'],
+      where: { email: email },
+    });
+  }
+
+  async findteamcount(team: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [members, count] = await this.teamRepository.findAndCount({
+      where: { team: ILike(`${team.trim()}`) },
+    });
+    return count >= 3;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async createTeam(team: CreateTeamDto) {
+    console.log(team);
+    return await this.userRepository.update(
+      { email: team.email },
+      { team: team.name },
+    );
+  }
+  async findTeam(team: string) {
+    const tteam = await this.userRepository.find({
+      select: ['name', 'email'],
+      where: { team: ILike(`${team.trim}`) },
+    });
+    return tteam;
+  }
+}

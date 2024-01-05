@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Appdatasource } from './utils/appdatasource';
+import { TeamModule } from './team/team.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { Appdatasource } from './utils/appdatasource';
     PassportModule.register({ session: true }),
     AuthModule,
     UserModule,
+    TeamModule,
   ],
   controllers: [],
   providers: [],

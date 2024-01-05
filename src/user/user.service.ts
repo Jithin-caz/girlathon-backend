@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from "typeorm";
 
 @Injectable()
 export class UserService {
@@ -48,8 +48,8 @@ export class UserService {
 
   async findOneByEmail(email: string) {
     return await this.userRepository.findOne({
-      select: ['email', 'password', 'name'],
-      where: { email: email },
+      select: ['email', 'team', 'name', 'id', 'password'],
+      where: { email: ILike(`${email.trim()}`) },
     });
   }
 
