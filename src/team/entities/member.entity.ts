@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ObjectId, ObjectIdColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'Member' })
 export class Member {
@@ -10,5 +10,5 @@ export class Member {
 
   @Column({ type: 'varchar', length: 255 }) phone: string;
 
-  @Column({ type: 'varchar', length: 255 }) team: string;
+  @Column({ type: 'varchar', length: 255,transformer:{to:value => value.trim(),from:value => value} }) team: string;
 }

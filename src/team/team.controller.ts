@@ -1,9 +1,16 @@
-import { Body, Controller, Post, Res, Session, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateMemberDto } from './dto/createmember.dto';
 import { Response } from 'express';
 import { CreateTeamDto } from './dto/createteam.dto';
-import { AuthenticatedGuard } from "../auth/guards/Authenticated.guard";
+import { AuthenticatedGuard } from '../auth/guards/Authenticated.guard';
 
 @Controller('team')
 export class TeamController {
@@ -27,7 +34,7 @@ export class TeamController {
   async assignName(
     @Session() session: Record<string, any>,
     @Res() res: Response,
-    @Body() body: any,
+    @Body() body:any,
   ) {
     console.log(session);
     if (await this.teamService.findTeam(body.team)) {
@@ -35,7 +42,7 @@ export class TeamController {
     } else {
       await this.teamService.createTeam({
         email: session.passport.user.email,
-        name:body.team,
+        name: body.team,
       });
       return res.status(200).json({ message: 'Team created successfully' });
     }

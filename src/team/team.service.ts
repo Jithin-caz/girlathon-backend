@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UsePipes, ValidationPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Member } from './entities/member.entity';
 import { CreateMemberDto } from './dto/createmember.dto';
 import { User } from '../user/entities/user.entity';
-import { CreateTeamDto } from "./dto/createteam.dto";
+import { CreateTeamDto } from './dto/createteam.dto';
 
 @Injectable()
 export class TeamService {
@@ -38,6 +38,7 @@ export class TeamService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @UsePipes(new ValidationPipe({ transform: true }))
   async createTeam(team: CreateTeamDto) {
     console.log(team);
     return await this.userRepository.update(
@@ -46,10 +47,16 @@ export class TeamService {
     );
   }
   async findTeam(team: string) {
+    const teamname = team.trim();
+    console.log(teamname);
     const tteam = await this.userRepository.find({
       select: ['name', 'email'],
-      where: { team: ILike(`${team.trim}`) },
+      where: { team: ILike(teamname) },
     });
-    return tteam;
+    console.log(tteam);
+    if (tteam.length > 0) {
+      return true;
+    }
+    return false;
   }
 }

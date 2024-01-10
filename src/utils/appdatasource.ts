@@ -12,3 +12,11 @@ export const Appdatasource = new DataSource({
   logging: true,
   entities: entities,
 });
+
+// export const Appdatasource = new DataSource({
+//   type: 'mongodb',
+//   url: 'mongodb+srv://abhinav200218:y0PIkHMOhhDOXDck@cluster0.4kxoad7.mongodb.net/?retryWrites=true&w=majority',
+//   synchronize: true,
+//   logging: true,
+//   entities: entities,
+// });

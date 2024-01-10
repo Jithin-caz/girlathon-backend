@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from "typeorm";
+import { ILike, ObjectId, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -39,7 +39,7 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
+  findOne(id: ObjectId) {
     return this.userRepository.findOne({
       select: ['email', 'password', 'name'],
       where: { id: id },
