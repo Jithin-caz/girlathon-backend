@@ -5,12 +5,16 @@ import {
   Res,
   Session,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateMemberDto } from './dto/createmember.dto';
 import { Response } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CreateTeamDto } from './dto/createteam.dto';
 import { AuthenticatedGuard } from '../auth/guards/Authenticated.guard';
+import { TeamNameDto } from './dto/teamname.dto';
 
 @Controller('team')
 export class TeamController {
@@ -31,10 +35,11 @@ export class TeamController {
   }
   @UseGuards(AuthenticatedGuard)
   @Post('team-assign')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async assignName(
     @Session() session: Record<string, any>,
     @Res() res: Response,
-    @Body() body:any,
+    @Body() body: TeamNameDto,
   ) {
     console.log(session);
     if (await this.teamService.findTeam(body.team)) {

@@ -10,5 +10,5 @@ export class User {
 
   @Column({ type: 'varchar', length: 255 }) password: string;
 
-  @Column({type: 'varchar', length: 255, nullable: true,transformer:{to:value => value.trim(),from:value => value}}) team: string;
+  @Column({ type: 'varchar', length: 255, nullable: true }) team: string;
 }

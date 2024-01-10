@@ -10,5 +10,5 @@ export class Member {
 
   @Column({ type: 'varchar', length: 255 }) phone: string;
 
-  @Column({ type: 'varchar', length: 255,transformer:{to:value => value.trim(),from:value => value} }) team: string;
+  @Column({ type: 'varchar', length: 255 }) team: string;
 }
