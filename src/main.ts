@@ -7,7 +7,6 @@ import { SessionEntity } from './utils/typeorm/entities/session';
 import { TypeormStore } from 'connect-typeorm';
 import { Appdatasource } from './utils/appdatasource';
 
-
 async function bootstrap() {
   if (Appdatasource.isInitialized === false) await Appdatasource.initialize();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

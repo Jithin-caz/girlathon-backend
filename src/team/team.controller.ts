@@ -29,8 +29,12 @@ export class TeamController {
         .status(250)
         .json({ message: 'Team is full Find another team dude' });
     } else {
-      await this.teamService.createMember(createTeamDto);
-      return res.status(200).json({ message: 'member added successfully' });
+      const response = await this.teamService.createMember(createTeamDto);
+      if (response) {
+        return res.status(200).json({ message: 'member added successfully' });
+      } else {
+        return res.status(200).json({ message: 'error' });
+      }
     }
   }
   @UseGuards(AuthenticatedGuard)
@@ -45,11 +49,16 @@ export class TeamController {
     if (await this.teamService.findTeam(body.team)) {
       return res.status(230).json({ message: 'Team Name already exist' });
     } else {
-      await this.teamService.createTeam({
+      const response = await this.teamService.createTeam({
         email: session.passport.user.email,
         name: body.team,
       });
-      return res.status(200).json({ message: 'Team created successfully' });
+      // console.log(response);
+      if (response) {
+        return res.status(200).json({ message: 'Team created' });
+      } else {
+        return res.status(250).json({ message: 'Error' });
+      }
     }
   }
 }

@@ -1,4 +1,3 @@
-import { User } from './entities/user.entity';
 import {
   Body,
   Controller,
@@ -26,7 +25,7 @@ export class UserController {
     } else {
       const response = await this.userService.create(createUserDto);
       console.log(response);
-      if (response.User){
+      if (response.User) {
         return res.status(200).json({ message: 'User created' });
       } else {
         return res.status(230).json({ message: 'Error' });
