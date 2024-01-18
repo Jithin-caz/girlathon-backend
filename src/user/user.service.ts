@@ -1,9 +1,10 @@
- import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, ObjectId, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -23,12 +24,15 @@ export class UserService {
       if (createUserDto.password.length < 6) {
         return 'Password must be at least 6 characters';
       }
+      const gensaalt = await bcrypt.genSalt(10);
+      const hashpass = await bcrypt.hash(createUserDto.password, gensaalt);
 
-      const user: User = new User();
+      const user: User = new User(); // Remove the argument from the constructor
       user.name = createUserDto.name;
       user.email = createUserDto.email;
-      user.password = createUserDto.password;
-      return this.userRepository.save(user);
+      user.password = hashpass;
+      console.log(user);
+      return await this.userRepository.save(user);
     } catch (e) {
       console.log(e);
       return e;
@@ -53,7 +57,7 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: number, _updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 

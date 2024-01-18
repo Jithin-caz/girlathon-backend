@@ -1,3 +1,4 @@
+import { User } from './entities/user.entity';
 import {
   Body,
   Controller,
@@ -23,8 +24,13 @@ export class UserController {
     if (await this.userService.findOneByEmail(createUserDto.email)) {
       return res.status(230).json({ message: 'Email already exists' });
     } else {
-      await this.userService.create(createUserDto);
-      return res.status(200).json({ message: 'User created' });
+      const response = await this.userService.create(createUserDto);
+      console.log(response);
+      if (response.User){
+        return res.status(200).json({ message: 'User created' });
+      } else {
+        return res.status(230).json({ message: 'Error' });
+      }
     }
   }
 
