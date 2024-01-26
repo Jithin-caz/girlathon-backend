@@ -19,12 +19,14 @@ export class User {
 
   @Column({ type: 'varchar', length: 255, nullable: true }) team: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true }) phone: string;
+
   @Column({ type: 'varchar', length: 255, nullable: true, default: 'user' })
   role: ['admin', 'user'];
 
-  @Column({ type: 'varchar', length: 255, nullable: true, default: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   idea: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true, default: 1 })
+  @Column({ type: 'integer', nullable: true, default: 1 })
   memberCount: number;
 }

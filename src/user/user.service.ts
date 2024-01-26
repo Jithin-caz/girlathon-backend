@@ -32,6 +32,7 @@ export class UserService {
       const user: User = new User(); // Remove the argument from the constructor
       user.name = createUserDto.name;
       user.email = createUserDto.email;
+      user.phone = createUserDto.phone;
       user.password = hashpass;
       console.log(user);
       return await this.userRepository.save(user);
@@ -43,7 +44,7 @@ export class UserService {
 
   findAll() {
     return this.userRepository.find({
-      select: ['email', 'team', 'memberCount', 'idea', 'name'],
+      select: ['email', 'team', 'memberCount', 'idea', 'name', 'phone'],
     });
   }
 
@@ -56,7 +57,7 @@ export class UserService {
 
   async findOneByEmail(email: string) {
     return await this.userRepository.findOne({
-      select: ['email', 'password', 'name', 'team', 'id', 'role'],
+      select: ['email', 'password', 'name', 'team', 'id', 'role', 'phone'],
       where: { email: email },
     });
   }
@@ -104,6 +105,18 @@ export class UserService {
       const response = { lead: rest, members: res2 };
       return response;
     } catch (e) {}
+  }
+
+  async findallusers() {
+    const res1:any = await this.userRepository.find({
+      select: ['name', 'email', 'phone', 'team'],
+    });
+    const res2:any = await this.teamRepository.find({
+      select: ['name', 'email', 'phone', 'team'],
+    });
+    const response = await res1.concat(res2);
+    console.log(response);
+    return response;
   }
 
   update(id: number, _updateUserDto: UpdateUserDto) {

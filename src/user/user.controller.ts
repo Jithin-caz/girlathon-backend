@@ -51,15 +51,29 @@ export class UserController {
   @Post('admin/passwordReset')
   async passwordReset(@Body() body: any, @Res() res: Response) {
     // console.log(body);
-    const response = await this.userService.passwordReset(
-      body.lead,
-      body.pass,
-    );
+    const response = await this.userService.passwordReset(body.lead, body.pass);
     if (response !== null) {
       return res.status(201).json({ message: 'Password reset' });
     } else {
       return res.status(230).json({ message: 'Error' });
     }
+  }
+  @Get('admin/data/:email')
+  async data(@Param('email') email: string) {
+    const response = await this.userService.profile(email);
+    if (response !== null) {
+      console.log(response);
+      return await response;
+    }
+  }
+
+  @Get('admin/alluser')
+  async all(@Res() res: Response) {
+    const response = await this.userService.findallusers();
+    if (response !== null) {
+      return response;
+    }
+    return null;
   }
 
   @Patch(':id') update(

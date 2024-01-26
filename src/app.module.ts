@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Appdatasource } from './utils/appdatasource';
 import { TeamModule } from './team/team.module';
+import { IdeaModule } from './idea/idea.module';
 
 
 @Module({
@@ -15,6 +16,7 @@ import { TeamModule } from './team/team.module';
     AuthModule,
     UserModule,
     TeamModule,
+    IdeaModule,
   ],
   controllers: [],
   providers: [],
