@@ -34,7 +34,8 @@ export class AuthController {
     res.send(req.user);
   }
 
-  @UseGuards(AuthenticatedGuard) @Get('profile') getProfile() {
-    return 'profile';
+  @UseGuards(AuthenticatedGuard) @Get('profile') getProfile(@Session() session: Record<string, any>) {
+    const email = session.passport.user.email;
+    return this.userService.profile(email);
   }
 }
