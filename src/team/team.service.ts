@@ -32,7 +32,7 @@ export class TeamService {
   async findteamcount(team: string) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [members, count] = await this.teamRepository.findAndCount({
-      where: { team: ILike(`${team.trim()}`) },
+      where: { team: ILike(`${team}`) },
     });
     return count >= 3;
   }
@@ -47,7 +47,7 @@ export class TeamService {
     );
   }
   async findTeam(team: string) {
-    const teamname = team.trim();
+    const teamname = team;
     console.log(teamname);
     const tteam = await this.userRepository.find({
       select: ['name', 'email'],
