@@ -15,6 +15,12 @@ export class TeamService {
 
   async createMember(member: CreateMemberDto) {
     try {
+      const user = await this.userRepository.findOne({
+        where: { team: member.team },
+      });
+      console.log(user);
+      user.memberCount++;
+      await this.userRepository.save(user);
       return await this.teamRepository.save(member);
     } catch (e) {
       console.log(e);
@@ -23,10 +29,20 @@ export class TeamService {
   }
 
   async findOneByEmail(email: string) {
-    return await this.teamRepository.findOne({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const res1 = await this.teamRepository.findOne({
       select: ['name'],
       where: { email: email },
     });
+    const res2 = await this.userRepository.findOne({
+      select: ['name'],
+      where: { email: email },
+    });
+    if (res1 || res2) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async findteamcount(team: string) {

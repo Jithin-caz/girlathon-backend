@@ -30,6 +30,7 @@ export class TeamController {
         .json({ message: 'Team is full Find another team dude' });
     } else {
       const response = await this.teamService.createMember(createTeamDto);
+      console.log(response);
       if (response) {
         return res.status(200).json({ message: 'member added successfully' });
       } else {

@@ -20,6 +20,13 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
+  @IsNotEmpty({
+    message: 'Phone No is required',
+  })
+  @IsEmail()
+  phone: string;
+
+  @IsString()
   @IsNotEmpty()
   @Matches(passwordRegex, {
     message: `Password must contain Minimum 8 and maximum 20 characters, 

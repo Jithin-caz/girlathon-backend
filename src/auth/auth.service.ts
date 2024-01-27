@@ -9,12 +9,15 @@ export class AuthService {
   async validateUser(email: string, passowrd: string): Promise<any> {
     const user = await this.userService.findOneByEmail(email);
     // console.log(email);
-    if (user && bcrypt.compare(user.password, passowrd)) {
+    if (user && (await bcrypt.compare(passowrd, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user;
-      console.log(rest);
       return rest;
     }
     return null;
+  }
+
+  async profile(email: string) {
+    return await this.userService.profile(email);
   }
 }

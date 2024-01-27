@@ -7,6 +7,7 @@ export class SessionSerializer extends PassportSerializer {
       user: user.name,
       email: user.email,
       team: user.team,
+      role: user.role,
     });
   }
 

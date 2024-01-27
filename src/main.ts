@@ -11,7 +11,7 @@ async function bootstrap() {
   if (Appdatasource.isInitialized === false) await Appdatasource.initialize();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:3000',
     credentials: true,
   });
   const sessionrepository = Appdatasource.getRepository(SessionEntity);
