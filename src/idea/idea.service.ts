@@ -17,6 +17,10 @@ export class IdeaService {
       const idea = await this.ideaRepository.save(Idea);
       const user = await this.userRepository.findOneBy({ team: idea.team });
       user.idea = true;
+      await this.ideaRepository.update(
+        { team: idea.team },
+        { email: user.email },
+      );
       await this.userRepository.save(user);
       if (idea && user.idea) {
         return idea;
@@ -63,6 +67,31 @@ export class IdeaService {
     try {
       const idea = await this.ideaRepository.findOneBy({ team: team });
       return idea;
+    } catch (err) {
+      console.error(err);
+      return err.message;
+    }
+  }
+
+  async listmarked() {
+    try {
+      const idea = await this.ideaRepository.find({
+        select: ['team', 'email', 'title', 'category', 'markdown'],
+      });
+      return idea;
+    } catch (err) {
+      console.error(err);
+      return err.message;
+    }
+  }
+
+  async issubmitted(team: string) {
+    try {
+      const idea = await this.ideaRepository.findOneBy({ team: team });
+      if (idea) {
+        return true;
+      }
+      return false;
     } catch (err) {
       console.error(err);
       return err.message;

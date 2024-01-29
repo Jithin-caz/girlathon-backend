@@ -7,20 +7,16 @@ export class isAdminGuard {
     if (
       request.isAuthenticated() &&
       (request.session.passport.user.role === 'admin' ||
-        request.session.passport.user.role === 'superadmin')
+        request.session.passport.user.role === 'owner')
     ) {
       return true;
     } else if (
       request.isAuthenticated() &&
       request.session.passport.user.role === 'user'
     ) {
-      throw new Error(
-        JSON.stringify({
-          message: 'You are not authorized to access this route',
-        }),
-      );
+      return false;
     } else {
-      throw new Error(JSON.stringify({ message: 'You are not authenticated' }));
+      return false;
     }
   }
 }

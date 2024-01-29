@@ -75,4 +75,23 @@ export class TeamService {
     }
     return false;
   }
+  async delete(email: string) {
+    try {
+      const team = await this.teamRepository.findOneBy({ email: email });
+      const user: User = await this.userRepository.findOneBy({
+        team: team.team,
+      });
+      user.memberCount = user.memberCount - 1;
+      await this.userRepository.save(user);
+      const member: any = await this.teamRepository.delete({ email: email });
+
+      if (member) {
+        return member;
+      }
+      return null;
+    } catch (err) {
+      console.error(err);
+      return err.message;
+    }
+  }
 }
