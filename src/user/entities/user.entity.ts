@@ -22,7 +22,7 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true }) phone: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true, default: 'user' })
-  role: ['admin', 'user'];
+  role: string;
 
   @Column({ type: 'boolean', nullable: true, default: false })
   idea: boolean;

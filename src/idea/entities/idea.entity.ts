@@ -14,4 +14,6 @@ export class Idea {
   team: string;
   @Column({ type: 'boolean', default: false })
   markdown: boolean;
+  @Column({type: 'varchar', length: 255, nullable: true})
+  email: string;
 }

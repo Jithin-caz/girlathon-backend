@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, ObjectId, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Member } from '../team/entities/member.entity';
+import * as process from 'process';
 
 @Injectable()
 export class UserService {
@@ -42,9 +43,38 @@ export class UserService {
     }
   }
 
+  async admincreate(createUserDto: CreateUserDto) {
+    try {
+      if (
+        !createUserDto.name ||
+        !createUserDto.email ||
+        !createUserDto.password
+      ) {
+        return 'Please fill all fields';
+      }
+      if (createUserDto.password.length < 6) {
+        return 'Password must be at least 6 characters';
+      }
+      const gensaalt = await bcrypt.genSalt(10);
+      const hashpass = await bcrypt.hash(createUserDto.password, gensaalt);
+
+      const user: User = new User(); // Remove the argument from the constructor
+      user.name = createUserDto.name;
+      user.email = createUserDto.email;
+      user.phone = createUserDto.phone;
+      user.role = 'admin';
+      user.password = hashpass;
+      console.log(user);
+      return await this.userRepository.save(user);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
   findAll() {
     return this.userRepository.find({
       select: ['email', 'team', 'memberCount', 'idea', 'name', 'phone'],
+      where: { role: 'user' },
     });
   }
 
@@ -107,16 +137,31 @@ export class UserService {
     } catch (e) {}
   }
 
-  async findallusers() {
-    const res1:any = await this.userRepository.find({
-      select: ['name', 'email', 'phone', 'team'],
-    });
-    const res2:any = await this.teamRepository.find({
-      select: ['name', 'email', 'phone', 'team'],
-    });
-    const response = await res1.concat(res2);
-    console.log(response);
-    return response;
+  async userPasswordReset(
+    email: string,
+    password: string,
+    prevpassword: string,
+  ) {
+    try {
+      const user = await this.userRepository.findOneBy({ email: email });
+      console.log(user);
+      if (user && (await bcrypt.compare(prevpassword, user.password))) {
+        console.log(email);
+        const gensaalt = await bcrypt.genSalt(10);
+        const hashpass = await bcrypt.hash(password, gensaalt);
+        const res = await this.userRepository.update(
+          { email: email },
+          { password: hashpass },
+        );
+        return res;
+      } else {
+        console.log('error');
+        return null;
+      }
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   }
 
   update(id: number, _updateUserDto: UpdateUserDto) {
