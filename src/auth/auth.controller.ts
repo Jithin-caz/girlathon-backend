@@ -38,6 +38,7 @@ export class AuthController {
     @Session() session: Record<string, any>,
     @Res() res: Response,
   ) {
+    console.log(session.id);
     session.destroy((err) => {
       if (err) {
         return res.status(500).json({ message: 'Error' });
